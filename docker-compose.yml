@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   eureka-server:
@@ -9,6 +9,18 @@ services:
     networks:
       - escuela-network
 
+  config-server:
+    build: ./config-server
+    container_name: config-server
+    ports:
+      - "8888:8888"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    depends_on:
+      - eureka-server
+    networks:
+      - escuela-network
+
   admin-service:
     build: ./admin-service
     container_name: admin-service
@@ -16,8 +28,10 @@ services:
       - "8083:8083"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
     depends_on:
       - eureka-server
+      - config-server
     networks:
       - escuela-network
 
@@ -28,8 +42,10 @@ services:
       - "8081:8081"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
     depends_on:
       - eureka-server
+      - config-server
     networks:
       - escuela-network
 
@@ -40,8 +56,10 @@ services:
       - "8082:8082"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
     depends_on:
       - eureka-server
+      - config-server
     networks:
       - escuela-network
 
@@ -52,21 +70,13 @@ services:
       - "8080:8080"
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
     depends_on:
       - eureka-server
+      - config-server
       - admin-service
       - alumno-service
       - curso-service
-    networks:
-      - escuela-network
-
-  frontend-escuela:
-    build: ./frontend-escuela
-    container_name: frontend-escuela
-    ports:
-      - "4200:80"
-    depends_on:
-      - gateway-service
     networks:
       - escuela-network
 
