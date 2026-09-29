@@ -20,8 +20,8 @@ import java.util.Collections;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    @Value("${jwt.secret}")
-    private String secret;
+@Value("${jwt.secret:ClaveSecretaSuperSeguraParaEscuelaMicroserviciosPDTprofeAPROBAME}")
+private String secret;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
