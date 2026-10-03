@@ -36,7 +36,7 @@ public class Alumno {
     public void setApellido(String apellido) { this.apellido = apellido; }
     
     public String getDni() { return dni; }
-    public void setDocumento(String dni) { this.dni = dni; }
+    public void setDni(String dni) { this.dni = dni; }
 
     public Integer getCursoId() { return cursoId; }
     public void setCursoId(Integer cursoId) { this.cursoId = cursoId; }

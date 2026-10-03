@@ -31,7 +31,7 @@ public class AlumnoController {
             .map(alumno -> {
                 alumno.setNombre(detalles.getNombre());
                 alumno.setApellido(detalles.getApellido());
-                alumno.setDocumento(detalles.getDni());
+                alumno.setDni(detalles.getDni());
                 alumno.setCursoId(detalles.getCursoId());
                 Alumno actualizado = alumnoRepository.save(alumno);
                 return ResponseEntity.ok(actualizado);

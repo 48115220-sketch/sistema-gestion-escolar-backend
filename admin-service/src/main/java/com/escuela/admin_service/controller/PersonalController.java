@@ -31,6 +31,7 @@ public class PersonalController {
 
     @PostMapping
     public Personal crear(@RequestBody Personal docente) {
+        docente.setId(null);
         return docenteService.guardar(docente);
     }
 
