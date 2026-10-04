@@ -1,8 +1,10 @@
 package com.escuela.alumno_service.controller;
 
-import com.escuela.alumno_service.entidad.Alumno;
-import com.escuela.alumno_service.repository.AlumnoRepository;
+import com.escuela.alumno_service.dto.AlumnoAltaDTO;
+import com.escuela.alumno_service.dto.AlumnoConCursoDTO;
+import com.escuela.alumno_service.service.AlumnoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,37 +15,41 @@ import java.util.List;
 public class AlumnoController {
 
     @Autowired
-    private AlumnoRepository alumnoRepository;
+    private AlumnoService alumnoService;
 
     @GetMapping
-    public List<Alumno> listarTodos() {
-        return alumnoRepository.findAll();
+    public List<AlumnoConCursoDTO> listarTodos() {
+        return alumnoService.obtenerTodos();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AlumnoConCursoDTO> obtenerPorId(@PathVariable Integer id) {
+        AlumnoConCursoDTO alumno = alumnoService.obtenerPorId(id);
+        if (alumno != null) {
+            return ResponseEntity.ok(alumno);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public Alumno crear(@RequestBody Alumno alumno) {
-        return alumnoRepository.save(alumno);
+    public ResponseEntity<AlumnoConCursoDTO> crear(@RequestBody AlumnoAltaDTO altaDTO) {
+        AlumnoConCursoDTO creado = alumnoService.guardar(altaDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Alumno> actualizar(@PathVariable Integer id, @RequestBody Alumno detalles) {
-        return alumnoRepository.findById(id)
-            .map(alumno -> {
-                alumno.setNombre(detalles.getNombre());
-                alumno.setApellido(detalles.getApellido());
-                alumno.setDni(detalles.getDni());
-                alumno.setCursoId(detalles.getCursoId());
-                Alumno actualizado = alumnoRepository.save(alumno);
-                return ResponseEntity.ok(actualizado);
-            })
-            .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<AlumnoConCursoDTO> actualizar(@PathVariable Integer id, @RequestBody AlumnoAltaDTO altaDTO) {
+        AlumnoConCursoDTO actualizado = alumnoService.actualizar(id, altaDTO);
+        if (actualizado != null) {
+            return ResponseEntity.ok(actualizado);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
-        if (alumnoRepository.existsById(id)) {
-            alumnoRepository.deleteById(id);
-            return ResponseEntity.ok().build();
+        if (alumnoService.eliminar(id)) {
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
     }

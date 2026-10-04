@@ -13,7 +13,7 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-    @Value("${jwt.secret:ClaveSecretaSuperSeguraParaEscuelaMicroserviciosPDTprofeAPROBAME}")
+    @Value("${jwt.secret}")
     private String claveSecreta;
 
     private final long TIEMPO_EXPIRACION = 86400000;

@@ -22,7 +22,7 @@ import java.util.Collections;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Value("${jwt.secret:ClaveSecretaSuperSeguraParaEscuelaMicroserviciosPDTprofeAPROBAME}")
+    @Value("${jwt.secret}")
     private String secret;
 
     @Override

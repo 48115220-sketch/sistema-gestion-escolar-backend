@@ -1,15 +1,18 @@
 package com.escuela.alumno_service.service;
 
-import com.escuela.alumno_service.entidad.Alumno;
+import com.escuela.alumno_service.dto.AlumnoAltaDTO;
+import com.escuela.alumno_service.dto.AlumnoConCursoDTO;
 import java.util.List;
 
 public interface AlumnoService {
-	
-    List<Alumno> obtenerTodos();
+
+    List<AlumnoConCursoDTO> obtenerTodos();
     
-    Alumno obtenerPorId(Integer id);
+    AlumnoConCursoDTO obtenerPorId(Integer id);
     
-    Alumno guardar(Alumno alumno);
+    AlumnoConCursoDTO guardar(AlumnoAltaDTO altaDTO);
     
-    void eliminar(Integer id);
+    AlumnoConCursoDTO actualizar(Integer id, AlumnoAltaDTO altaDTO);
+    
+    boolean eliminar(Integer id);
 }

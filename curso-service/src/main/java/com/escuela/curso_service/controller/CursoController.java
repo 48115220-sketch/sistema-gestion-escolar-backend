@@ -1,8 +1,10 @@
 package com.escuela.curso_service.controller;
 
-import com.escuela.curso_service.entidad.Curso;
+import com.escuela.curso_service.dto.CursoAltaDTO;
+import com.escuela.curso_service.dto.CursoConDocenteDTO;
 import com.escuela.curso_service.service.CursoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,13 +18,13 @@ public class CursoController {
     private CursoService cursoService;
 
     @GetMapping
-    public List<Curso> listarTodos() {
+    public List<CursoConDocenteDTO> listarTodos() {
         return cursoService.obtenerTodos();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Curso> obtenerPorId(@PathVariable Integer id) {
-        Curso curso = cursoService.obtenerPorId(id);
+    public ResponseEntity<CursoConDocenteDTO> obtenerPorId(@PathVariable Integer id) {
+        CursoConDocenteDTO curso = cursoService.obtenerPorId(id);
         if (curso == null) {
             return ResponseEntity.notFound().build();
         }
@@ -30,23 +32,25 @@ public class CursoController {
     }
 
     @PostMapping
-    public Curso crear(@RequestBody Curso curso) {
-        return cursoService.guardar(curso);
+    public ResponseEntity<CursoConDocenteDTO> crear(@RequestBody CursoAltaDTO altaDTO) {
+        CursoConDocenteDTO creado = cursoService.guardar(altaDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Curso> actualizar(@PathVariable Integer id, @RequestBody Curso curso) {
-        Curso existente = cursoService.obtenerPorId(id);
-        if (existente == null) {
+    public ResponseEntity<CursoConDocenteDTO> actualizar(@PathVariable Integer id, @RequestBody CursoAltaDTO altaDTO) {
+        CursoConDocenteDTO actualizado = cursoService.actualizar(id, altaDTO);
+        if (actualizado == null) {
             return ResponseEntity.notFound().build();
         }
-        curso.setId(id);
-        return ResponseEntity.ok(cursoService.guardar(curso));
+        return ResponseEntity.ok(actualizado);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
-        cursoService.eliminar(id);
-        return ResponseEntity.noContent().build();
+        if (cursoService.eliminar(id)) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

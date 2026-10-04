@@ -1,15 +1,14 @@
 package com.escuela.curso_service.service;
 
-import com.escuela.curso_service.entidad.Curso;
+import com.escuela.curso_service.dto.CursoAltaDTO;
+import com.escuela.curso_service.dto.CursoConDocenteDTO;
+
 import java.util.List;
 
 public interface CursoService {
-	
-    List<Curso> obtenerTodos();
-    
-    Curso obtenerPorId(Integer id);
-    
-    Curso guardar(Curso curso);
-    
-    void eliminar(Integer id);
+    List<CursoConDocenteDTO> obtenerTodos();
+    CursoConDocenteDTO obtenerPorId(Integer id);
+    CursoConDocenteDTO guardar(CursoAltaDTO altaDTO);
+    CursoConDocenteDTO actualizar(Integer id, CursoAltaDTO altaDTO);
+    boolean eliminar(Integer id);
 }

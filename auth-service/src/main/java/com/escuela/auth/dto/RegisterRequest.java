@@ -1,10 +1,10 @@
 package com.escuela.auth.dto;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Data
-public class RegisterRequest {
-    private String nombreUsuario;
-    private String clave;
-    private String correo;
-}
+public record RegisterRequest(
+    @JsonProperty("username") @JsonAlias({"nombreUsuario", "user"}) String nombreUsuario,
+    @JsonProperty("password") @JsonAlias({"clave", "contrasena"}) String clave,
+    String correo
+) {}
